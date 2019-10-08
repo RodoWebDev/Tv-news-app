@@ -1,0 +1,28 @@
+.support-page{
+	  .support-logo {
+	    padding: 20px 0;
+	    min-height: 200px;
+	    text-align: center;
+
+	    img {
+	      max-width: 130px;
+	    }
+	  }
+
+	  form{
+          margin: 20px;
+
+          .item{
+          border: 2px solid #ddd !important;
+          }
+
+          .label[stacked] {
+			   font-size: 14px;
+			   margin: 10px;
+			   color: #999;
+		  }
+		  .item.item-label-stacked .text-input {
+		    margin-left: 8px;
+		 }
+	  }
+}	  

@@ -1,0 +1,76 @@
+page-videos {
+
+	.categories{
+
+		.category-name{
+			width: 100%;
+			p{
+				display: inline-block;
+				background: #2a53a4;
+		    color: #FFF;
+		    padding: 6px;
+		    margin: 0;
+			}
+		}
+
+		.posts{
+			overflow-x:scroll;
+			overflow-y:hidden;
+			width:auto;
+			height:200px;
+			display: flex;
+		}
+
+		.post-item{
+			min-width: 40%;
+			height: 250px;
+
+			.card{
+				min-height: 170px;
+				.card-content{
+					padding: 0;
+				}
+				.details{
+					padding: 6px;
+				}
+				p{
+					font-size: 1rem;
+					line-height: 1rem;
+				}
+			}
+		}
+	}
+
+	  // footer
+  .bottom-segment{
+  	background-color: color($colors, primary);
+  	padding: 2rem 20px 2px 20px;
+
+
+  	ion-label{
+  		margin: 0;
+  		font-weight: bold;
+    	font-size: 1.2rem;
+      line-height: 1.8rem;
+    }
+    .segment-button.segment-activated{
+    	border-color: #b20015;
+    	border-width: 0;
+    }
+
+    .watch-live {
+      overflow: visible;
+      opacity: 1;
+
+      img {
+        position: absolute;
+        left: 50%;
+        top: -34px;
+        width: 70%;
+        z-index: 59;
+        transform: translateX(-50%);
+      }
+    }
+  }
+
+}

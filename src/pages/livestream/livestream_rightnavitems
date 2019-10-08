@@ -1,0 +1,72 @@
+import { Component, ViewChild } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AlertController, App, FabContainer, ItemSliding, List, ModalController, NavController, ToastController, LoadingController, Refresher } from 'ionic-angular';
+import { SearchPage } from '../search/search';
+import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
+import { Service } from '../../providers/service';
+
+@Component({
+  selector: 'page-livestream',
+  templateUrl: 'livestream.html'
+})
+export class LivestreamPage {
+  @ViewChild('scheduleList', { read: List }) scheduleList: List;
+    url : any;
+    dayIndex = 0;
+    queryText = '';
+    segment = 'all';
+    excludeTracks: any = [];
+    shownSessions: any = [];
+    groups: any = [];
+    showRecent: boolean = false;
+
+    constructor(private sanitize: DomSanitizer,
+      public navCtrl: NavController,
+      public modalCtrl: ModalController,
+      public service: Service) { 
+        this.url = sanitize.bypassSecurityTrustResourceUrl("http://tvcnigeria.thrilliant.com.ng/");
+    }
+
+    ionViewWillLeave() {
+        let listaFrames = document.getElementsByTagName("iframe");
+        for (var index = 0; index < listaFrames.length; index++) {
+         let iframe = listaFrames[index].contentWindow;
+         iframe.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+       }
+     }
+
+     presentFilter() {
+      let modal = this.modalCtrl.create(ScheduleFilterPage, this.excludeTracks);
+      modal.present();
+  
+      modal.onWillDismiss((data: any[]) => {
+        if (data) {
+          this.excludeTracks = data;
+          this.updateSchedule();
+        }
+      });
+  
+    }
+
+    updateSchedule() {
+      // Close any open sliding items when the schedule updates
+      this.scheduleList && this.scheduleList.closeSlidingItems();
+  
+      if(this.showRecent){
+        this.showRecent = false;
+      }
+      else{
+        this.showRecent = true;
+       // this.filter.topStoriesPage += 1;
+       }
+  
+      this.service.getTimeline(this.dayIndex, this.queryText, this.excludeTracks, this.segment).subscribe((data: any) => {
+        this.shownSessions = data.shownSessions;
+        this.groups = data.groups;
+      });
+    }
+    
+    searchPage(){
+      this.navCtrl.push(SearchPage);
+    }
+}

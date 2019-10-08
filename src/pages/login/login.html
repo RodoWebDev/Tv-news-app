@@ -1,0 +1,121 @@
+<ion-header class="login-header" no-border>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="page-login">
+
+<div *ngIf="!service.loggedInn">
+<div class="name">
+<h2>MSTORE APP</h2>
+</div>
+</div>
+
+<form #loginForm="ngForm" novalidate>
+      <ion-item>
+        <ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
+          required placeholder="Email">
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="username.valid || submitted == false" color="danger" padding-left>
+        Username is required
+      </p>
+
+      <ion-item>
+        <ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required placeholder="Password">
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="password.valid || submitted == false" color="danger" padding-left>
+        Password is required
+      </p>
+
+      <button ion-button (click)="onLogin(loginForm)" type="submit" block color="button-color">SIGN IN</button>
+</form>
+
+<hr>
+<button ion-button block clear type="submit" class="button button-block button-default or-button" text-uppercase>OR</button>
+
+<ion-row responsive-sm class="social-login">>
+  <ion-col>
+          <button ion-button block style="background-color: #3B5998; color: #fff" type="submit" class="button button-block button-default" [disabled]="disableSubmit" (click)="facebookLogin(loginData)">
+          <ion-icon item-left style="color:#fff; padding-right: 5px;" ios="logo-facebook" md="logo-facebook"></ion-icon>
+           FACEBOOK
+           <ion-spinner *ngIf="facebookSpinner" name="crescent"></ion-spinner>
+      </button>
+
+  </ion-col>
+  <ion-col>
+          <button ion-button block style="background-color: #d34836; color: #fff" type="submit" class="button button-block button-default" [disabled]="disableSubmit" (click)="gmailLogin(loginData)">
+          <ion-icon style="color:#fff; padding-right: 5px;" ios="logo-google" md="logo-google"></ion-icon>
+           GOOGLE
+           <ion-spinner *ngIf="googleSpinner" name="crescent"></ion-spinner>
+      </button>
+
+  </ion-col>
+</ion-row>
+
+<div class="register">
+<h2>Not yet registered? <a (click)="onSignup()">Sign Up</a></h2>
+</div>
+
+
+<!--div *ngIf="!service.loggedInn" class="margin">
+  <div class="logo">
+    <img src="assets/img/logo-icon.png" alt="Shop logo">
+  </div>
+
+  <form #loginForm="ngForm" novalidate>
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label stacked>Username</ion-label>
+        <ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
+          required>
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="username.valid || submitted == false" color="danger" padding-left>
+        Username is required
+      </p>
+
+      <ion-item>
+        <ion-label stacked>Password</ion-label>
+        <ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="password.valid || submitted == false" color="danger" padding-left>
+        Password is required
+      </p>
+    </ion-list>
+
+    <ion-row responsive-sm>
+      <ion-col>
+        <button ion-button (click)="onLogin(loginForm)" type="submit" block color="button-color"style="color: #fff">Login</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button (click)="onSignup()" color="light" block style="background-color: #ccc; color: #fff">Signup</button>
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <ion-row responsive-sm>
+  <ion-col>
+          <button ion-button block style="background-color: #3B5998; color: #fff" type="submit" class="button button-block button-default" [disabled]="disableSubmit" (click)="facebookLogin(loginData)">
+          <ion-icon item-left style="color:#fff; padding-right: 5px;" ios="logo-facebook" md="logo-facebook"></ion-icon>
+           Facebook
+           <ion-spinner *ngIf="facebookSpinner" name="crescent"></ion-spinner>
+      </button>
+
+  </ion-col>
+  <ion-col>
+          <button ion-button block style="background-color: #d34836; color: #fff" type="submit" class="button button-block button-default" [disabled]="disableSubmit" (click)="gmailLogin(loginData)">
+          <ion-icon style="color:#fff; padding-right: 5px;" ios="logo-google" md="logo-google"></ion-icon>
+           Google
+           <ion-spinner *ngIf="googleSpinner" name="crescent"></ion-spinner>
+      </button>
+
+  </ion-col>
+</ion-row>
+</div-->
+</ion-content>

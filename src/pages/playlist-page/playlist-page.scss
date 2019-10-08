@@ -1,0 +1,52 @@
+.playlist-page {
+
+ background-color:#fff;
+
+ .card-background-page { 
+
+ .row.unlimited-items {
+  flex-wrap: wrap;
+  padding: 6px 0 0 5px;
+  }
+
+  .row.unlimited-items .col{
+  flex: none;
+  width: 50%;
+  padding: 0 5px 5px 0;
+  }
+
+  ion-card {
+    position: relative;
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
+    margin-bottom: 5px;
+
+    img{
+      //height:215px;
+    }
+
+    ion-card-content{
+      padding:0px;
+      overflow: hidden;
+    }
+
+    .label{
+      margin: 10px 0;
+      text-align: center;
+      text-transform: capitalize;
+      font-size: 17px;
+      }
+    }
+
+  }
+}
+
+
+.playlist-header{
+   .toolbar-title-md{
+      text-align:left;
+      text-transform:uppercase;
+      font-weight:600;
+   }
+ }  

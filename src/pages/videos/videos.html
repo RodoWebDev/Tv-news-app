@@ -1,0 +1,96 @@
+<ion-header
+  no-border
+  [scrollHide]="headerScrollConfig"
+  [scrollContent]="pageContent"
+>
+  <ion-navbar no-border-bottom>
+    <ion-title>
+      <img src="assets/img/logo-toolber.png" />
+    </ion-title>
+
+    <ion-buttons end>
+      <button
+        ion-button
+        icon-only
+        (click)="searchPage()"
+        style="margin-right: 10px;"
+        color="light"
+      >
+        <ion-icon name="ios-search"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="presentFilter()" color="light">
+        <ion-icon ios="ios-options" md="md-options"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #pageContent fullscreen>
+  <!-- <iframe
+    width="100%"
+    height="315"
+    src="https://www.youtube.com/embed/O8plfDH-fWo?enablejsapi=1"
+  ></iframe> -->
+  <iframe src="https://www.youtube.com/embed/live_stream?channel=UCgp4A6I8LCWrhUzn-5SbKvA" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+  <ion-row class="categories" *ngFor="let category of categories">
+    <!-- <ion-row class="categories" *ngIf="categories[0]"> -->
+    <div class="category-name">
+      <p>{{ category.name }}</p>
+    </div>
+
+    <div class="posts">
+      <div class="post-item" *ngIf="!categoryPosts['' + category.id]">
+        Loading...
+      </div>
+      <div
+        class="post-item"
+        *ngFor="let item of categoryPosts['' + category.id]"
+      >
+        <ion-card tappable (click)="getPost(item)">
+          <ion-card-content>
+            <ion-thumbnail
+              item-left
+              *ngIf="
+                item.better_featured_image &&
+                item.better_featured_image.media_details?.sizes?.thumb_288x190
+              "
+            >
+              <img
+                src="{{
+                  item.better_featured_image.media_details.sizes.thumb_288x190
+                    .source_url
+                }}"
+              />
+            </ion-thumbnail>
+
+            <ion-thumbnail item-left *ngIf="!item.better_featured_image">
+              <img src="assets/img/shop-icon.jpg" />
+            </ion-thumbnail>
+          </ion-card-content>
+          <div class="details">
+            <p [innerHTML]="item.title?.rendered | sanitizeHtml"></p>
+            <!-- <h3  style="margin: 10px 0;"><ion-icon name="md-time"></ion-icon>{{item.date | keys}}</h3> -->
+            <!-- <div [innerHTML]="item.content | sanitizeHtml" class="info"></div> -->
+          </div>
+        </ion-card>
+      </div>
+    </div>
+  </ion-row>
+</ion-content>
+
+<ion-footer [scrollHide]="footerScrollConfig" [scrollContent]="pageContent">
+  <ion-segment class="bottom-segment" [(ngModel)]="segment">
+    <ion-segment-button value="latest" (click)="showHome()">
+      <ion-label>TOP NEWS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button class="watch-live" icon-only value="business">
+      <!-- <ion-label>Livestream</ion-label> -->
+      <img src="assets/img/youtube.png" />
+      <!-- <p>Watch Live</p> -->
+    </ion-segment-button>
+    <ion-segment-button value="sports" (click)="showReport()">
+      <ion-label>U-REPORT</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-footer>

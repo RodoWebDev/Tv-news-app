@@ -1,0 +1,211 @@
+// Media of at most the maximum breakpoint width. No query for the largest breakpoint.
+// Makes the @content apply to the given breakpoint and narrower.
+$fa-font-path: "../assets/fonts" !default;
+@import "font-awesome";
+
+i[class^="fa-"],
+ion-icon[class^="fa-"] {
+  font-family: "FontAwesome" !important;
+}
+
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+  $max: breakpoint-max($name, $breakpoints);
+  @if $max {
+     @media (max-width: $max){
+      @content;
+    }
+  }
+  @else {
+     @content;
+  }
+}
+
+.modal-wrapper {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+// Name of the next breakpoint, or null for the last breakpoint.
+//
+//    >> breakpoint-next(sm)
+//
+//    >> breakpoint-next(sm, (xs: 0, sm: 576px,: 768px, lg: 992px, xl: 1200px))
+//
+//    >> breakpoint-next(sm, $breakpoint-names: (xs sm lg xl))
+//
+@function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
+  $n: index($breakpoint-names, $name);
+  @return if($n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
+}
+
+// Maximum breakpoint width. Null for the largest (last) breakpoint.
+// The maximum value is calculated as the minimum of the next one less 0.1.
+//
+//    >> breakpoint-max(sm, (xs: 0, sm: 576px,: 768px, lg: 992px, xl: 1200px))
+//    767px
+@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+  $next: breakpoint-next($name, $breakpoints);
+  @return if($next, breakpoint-min($next, $breakpoints) - 1px, null);
+}
+
+// Creates text alignment classes based on screen size
+// TODO this would be nice to add to the framework
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+  @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+    // Provide text `[text-{bp}]` attributes for aligning text based on screen size
+    [text#{$infix}-center] {
+      text-align: center;
+    }
+
+    [text#{$infix}-left] {
+      text-align: left;
+    }
+
+    [text#{$infix}-right] {
+      text-align: right;
+    }
+
+    [hidden#{$infix}-up] {
+      display: none;
+    }
+  }
+  @include media-breakpoint-down($breakpoint, $grid-breakpoints) {
+    [hidden#{$infix}-down] {
+      display: none;
+    }
+  }
+}
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: url("../assets/font/Montserrat/Montserrat-Regular.ttf");
+}
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: url("../assets/font/Montserrat/Montserrat-Light.ttf");
+}
+
+* {
+  font-family: 'Montserrat-Regular';
+}
+
+ion-spinner {
+  display: block;
+  margin: 25px auto;
+}
+
+//alert
+.alert .alert-title {
+  font-size: 17px;
+}
+
+.alert .alert-sub-title {
+  font-size: 14px;
+}
+
+//toolabr
+.toolbar {
+  padding: 4px;
+  min-height: 54px;
+}
+
+.toolbar-background {
+  color: #FFF;
+  background: #000;
+  border-color: #000;
+}
+
+.toolbar-title,
+.toolbar-title-ios {
+  text-align: left;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.toolbar-title img {
+  max-width: 180px;
+}
+
+.scroll-content {
+  // margin-top: 54px !important;
+}
+
+.spinner-crescent circle,
+.spinner-ios-crescent circle {
+  stroke: #000;
+}
+
+.content-ios.outer-content {
+  background: #ffffff;
+}
+
+.bar-button-default-ios {
+  color: #ffffff;
+  background-color: transparent;
+}
+
+.toolbar-title-ios {
+  color: color($colors, primary);
+}
+
+.list > .item-block:last-child {
+  border-bottom: 0;
+}
+
+.list-header {
+  border-bottom: 0;
+  margin-bottom: 0;
+  border-top: 0;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #999;
+  font-weight: 600;
+}
+
+.list-header-ios {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #999;
+  font-weight: 600;
+}
+
+.list .item-block .item-inner {
+  border-bottom: 0;
+}
+
+.item ion-icon[item-left] + .item-inner {
+  margin-left: 12px;
+}
+
+.item > ion-icon,
+.item-inner > ion-icon {
+  font-size: 44px;
+}
+
+ion-icon {
+  &[class*="tabicon-"] {
+    // Instead of using the font-based icons
+    // We're applying SVG masks
+    //background: currentColor;
+    //      width: 1em;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  // custom icons
+  &[class*="tabicon-livestream"] {
+    content: url("../assets/img/youtube.png") !important;
+  }
+
+  &[class*="tabicon-iwitness"] {
+    background-image: url("../assets/img/iwitness.png") !important;
+  }
+
+  &[class*="tabicon-contact"] {
+    background-image: url("../assets/img/contact.png") !important;
+  }
+}

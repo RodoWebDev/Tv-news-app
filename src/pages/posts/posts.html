@@ -1,0 +1,274 @@
+<ion-header no-border [scrollHide]="headerScrollConfig" [scrollContent]="pageContent">
+  <ion-navbar no-border-bottom>
+    <!-- 
+    <button ion-button menuToggle color="primary">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+ -->
+    <ion-title>
+      <img src="assets/img/logo-toolber.png">
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="searchPage()" style="margin-right: 10px;" color="primary">
+        <ion-icon name="ios-search"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="presentFilter()" color="primary">
+        <ion-icon ios="ios-options" md="md-options"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <!--ion-toolbar no-border-top>
+    <ion-searchbar
+     [(ngModel)]="myInput"
+     [showCancelButton]="shouldShowCancel"
+     (ionInput)="onInput($event)"
+     (ionCancel)="onCancel($event)">
+    </ion-searchbar>
+  </ion-toolbar-->
+
+
+  <div class="segment">
+    <ion-segment [(ngModel)]="segment" (ionChange)="updateSchedule()">
+      <ion-segment-button value="latest">
+        <ion-label>LATEST NEWS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="politics">
+        <ion-label>POLITICS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="business">
+        <ion-label>BUSINESS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="sports">
+        <ion-label>SPORTS</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-header>
+
+<ion-content class="posts-content" #pageContent fullscreen>
+  
+  <ion-slides #slider (ionSlideDidChange)="slideChanged()" zoom="false">
+    <ion-slide>
+      <div class="posts">
+        <ion-spinner *ngIf="!topStories?.posts" name="crescent"></ion-spinner>
+        <div *ngIf="topStories?.posts" class="no-post">
+          <div *ngIf="!topStories?.posts.length">
+            <h3>No posts found!</h3>
+          </div>
+        </div>
+<!-- 
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+ -->
+        <div [hidden]="segment != 'latest'" class="show-recent" *ngIf="topStories?.posts.length">
+          <!-- 
+          <ion-row class="row">
+            <ion-slides options="{'loop': true, 'spaceBetween': 10}" pager loop>
+                <ion-slide *ngFor="let post of featuredStories?.posts" (click)="goToPostDetail(post)">
+                  
+                  <div class="card coustom-card">
+                    <img *ngIf="post.thumbnail_images.medium_large" src="{{post.thumbnail_images.medium_large.url}}">
+                    <p class="details" [innerHTML]="post.title"> </p>
+                  </div>
+
+                </ion-slide>
+            </ion-slides>
+          </ion-row>
+       -->
+          <ion-row class="row unlimited-items">
+            <ion-col *ngFor="let post of topStories?.posts" class="col">
+
+              <ion-card tappable (click)="goToPostDetail(post)">
+                  <ion-card-content>
+                    <div *ngIf="post.thumbnail_images" class="post-image">
+                      <img *ngIf="post.thumbnail_images.medium_large" src="{{post.thumbnail_images.medium_large.url}}">
+                    </div>
+
+                    <div *ngIf="post.better_featured_image && post.better_featured_image.source_url" class="post-image">
+                      <img src="{{post.better_featured_image.source_url}}">  
+                    </div>
+
+                    <div *ngIf="post.attachments?.length && !post.thumbnail_images && !post.thumbnail">
+                      <img *ngIf="post.attachments[0].mime_type == 'image/jpeg' || post.attachments[0].mime_type == 'image/gif' || post.attachments[0].mime_type == 'image/png'" src="{{post.attachments[0].url}}">
+                        <div *ngIf="post.attachments[0].mime_type != 'image/jpeg' && post.attachments[0].mime_type != 'image/gif' && post.attachments[0].mime_type != 'image/png'" class="videoContainer">
+                        <video src="{{post.attachments[0].url}}" controls></video>
+                      </div>
+                    </div>
+      <!-- 
+                    <ion-thumbnail item-left *ngIf="!post.better_featured_image || !post.better_featured_image.source_url">
+                      <img src="assets/img/shop-icon.png">
+                    </ion-thumbnail>
+                     -->
+                </ion-card-content>
+                <div class="details">
+                  <h2 [innerHTML]="post.title"></h2>
+                  <p color="light"><small><ion-icon name="md-time"></ion-icon> {{post.date | keys}}</small></p>
+                  
+                  <!-- <div [innerHTML]="post.excerpt" class="info"></div> -->
+                </div>
+              </ion-card>
+
+            </ion-col>
+          </ion-row>
+          <ion-item style="text-align: center;" [hidden]="hasMoreStories">No More Stories</ion-item>
+        </div> 
+      </div>
+
+
+      <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="hasMoreTopStories && !showRecent">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText='Loading more stories..'></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+      <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="hasMoreStories && showRecent">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+             loadingText='Loading more stories..'>
+            </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+    </ion-slide>
+
+
+    <ion-slide>
+      <div class="posts">
+        <div [hidden]="segment != 'politics'" class="show-recent">
+          <ion-row class="row unlimited-items">
+            <ion-col *ngFor="let post of politics?.posts" class="col">
+
+              <ion-card tappable (click)="goToPostDetail(post)">
+                  <ion-card-content>
+                    <div *ngIf="post.thumbnail_images" class="post-image">
+                      <img *ngIf="post.thumbnail_images.medium_large" src="{{post.thumbnail_images.medium_large.url}}">
+                    </div>
+
+                    <div *ngIf="post.better_featured_image && post.better_featured_image.source_url" class="post-image">
+                      <img src="{{post.better_featured_image.source_url}}">  
+                    </div>
+
+                    <div *ngIf="post.attachments?.length && !post.thumbnail_images && !post.thumbnail">
+                      <img *ngIf="post.attachments[0].mime_type == 'image/jpeg' || post.attachments[0].mime_type == 'image/gif' || post.attachments[0].mime_type == 'image/png'" src="{{post.attachments[0].url}}">
+                        <div *ngIf="post.attachments[0].mime_type != 'image/jpeg' && post.attachments[0].mime_type != 'image/gif' && post.attachments[0].mime_type != 'image/png'" class="videoContainer">
+                        <video src="{{post.attachments[0].url}}" controls></video>
+                      </div>
+                    </div>
+      <!-- 
+                    <ion-thumbnail item-left *ngIf="!post.better_featured_image || !post.better_featured_image.source_url">
+                      <img src="assets/img/shop-icon.png">
+                    </ion-thumbnail>
+                     -->
+                </ion-card-content>
+                <div class="details">
+                  <h2 [innerHTML]="post.title"></h2>
+                  <p color="light"><small><ion-icon name="md-time"></ion-icon> {{post.date | keys}}</small></p>
+                  
+                  <!-- <div [innerHTML]="post.excerpt" class="info"></div> -->
+                </div>
+              </ion-card>
+
+            </ion-col>
+          </ion-row>
+          <ion-item style="text-align: center;" [hidden]="hasMoreStories">
+            No More Stories
+          </ion-item>
+        </div>
+      </div>
+    </ion-slide>
+
+
+    <ion-slide>
+      <div [hidden]="segment != 'business'" class="show-recent">
+        <ion-row class="row unlimited-items">
+          <ion-col *ngFor="let post of business?.posts" class="col">
+
+            <ion-card tappable (click)="goToPostDetail(post)">
+                <ion-card-content>
+                  <div *ngIf="post.thumbnail_images" class="post-image">
+                    <img *ngIf="post.thumbnail_images.medium_large" src="{{post.thumbnail_images.medium_large.url}}">
+                  </div>
+
+                  <div *ngIf="post.better_featured_image && post.better_featured_image.source_url" class="post-image">
+                    <img src="{{post.better_featured_image.source_url}}">  
+                  </div>
+
+                  <div *ngIf="post.attachments?.length && !post.thumbnail_images && !post.thumbnail">
+                    <img *ngIf="post.attachments[0].mime_type == 'image/jpeg' || post.attachments[0].mime_type == 'image/gif' || post.attachments[0].mime_type == 'image/png'" src="{{post.attachments[0].url}}">
+                      <div *ngIf="post.attachments[0].mime_type != 'image/jpeg' && post.attachments[0].mime_type != 'image/gif' && post.attachments[0].mime_type != 'image/png'" class="videoContainer">
+                      <video src="{{post.attachments[0].url}}" controls></video>
+                    </div>
+                  </div>
+    <!-- 
+                  <ion-thumbnail item-left *ngIf="!post.better_featured_image || !post.better_featured_image.source_url">
+                    <img src="assets/img/shop-icon.png">
+                  </ion-thumbnail>
+                   -->
+              </ion-card-content>
+              <div class="details">
+                <h2 [innerHTML]="post.title"></h2>
+                <p color="light"><small><ion-icon name="md-time"></ion-icon> {{post.date | keys}}</small></p>
+                
+                <!-- <div [innerHTML]="post.excerpt" class="info"></div> -->
+              </div>
+            </ion-card>
+
+
+
+          </ion-col>
+        </ion-row>
+        <ion-item style="text-align: center;" [hidden]="hasMoreStories">
+          No More Stories
+        </ion-item>
+      </div>
+    </ion-slide>
+
+
+
+    <ion-slide>
+      <div [hidden]="segment != 'sports'" class="show-recent">
+        <ion-row class="row unlimited-items">
+          <ion-col *ngFor="let post of sports?.posts" class="col">
+
+            <ion-card tappable (click)="goToPostDetail(post)">
+                <ion-card-content>
+                  <div *ngIf="post.thumbnail_images" class="post-image">
+                    <img *ngIf="post.thumbnail_images.medium_large" src="{{post.thumbnail_images.medium_large.url}}">
+                  </div>
+
+                  <div *ngIf="post.better_featured_image && post.better_featured_image.source_url" class="post-image">
+                    <img src="{{post.better_featured_image.source_url}}">  
+                  </div>
+
+                  <div *ngIf="post.attachments?.length && !post.thumbnail_images && !post.thumbnail">
+                    <img *ngIf="post.attachments[0].mime_type == 'image/jpeg' || post.attachments[0].mime_type == 'image/gif' || post.attachments[0].mime_type == 'image/png'" src="{{post.attachments[0].url}}">
+                      <div *ngIf="post.attachments[0].mime_type != 'image/jpeg' && post.attachments[0].mime_type != 'image/gif' && post.attachments[0].mime_type != 'image/png'" class="videoContainer">
+                      <video src="{{post.attachments[0].url}}" controls></video>
+                    </div>
+                  </div>
+    <!-- 
+                  <ion-thumbnail item-left *ngIf="!post.better_featured_image || !post.better_featured_image.source_url">
+                    <img src="assets/img/shop-icon.png">
+                  </ion-thumbnail>
+                   -->
+              </ion-card-content>
+              <div class="details">
+                <h2 [innerHTML]="post.title"></h2>
+                <p color="light"><small><ion-icon name="md-time"></ion-icon> {{post.date | keys}}</small></p>
+                
+                <!-- <div [innerHTML]="post.excerpt" class="info"></div> -->
+              </div>
+            </ion-card>
+
+
+          </ion-col>
+        </ion-row>
+        <ion-item style="text-align: center;" [hidden]="hasMoreStories">
+          No More Stories
+        </ion-item>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+
+</ion-content>
+

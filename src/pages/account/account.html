@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Account</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list style="margin-top: 20px">
+         <div class="profile-image">
+            <img src="{{image}}" width="80" height="80" style="display: block; margin-left: auto; margin-right: auto;">
+         </div>
+         <button *ngIf="service.loggedInn" ion-button no-line block clear style="text-align:center">
+            <ion-label color="dark" text-uppercase><strong>{{username}}</strong></ion-label>
+         </button>
+          <button *ngIf="!service.loggedInn" ion-button no-line block clear style="text-align:center">
+            <ion-label color="dark" text-uppercase><strong>Welcome</strong></ion-label>
+         </button>
+      </ion-list>
+    <hr>
+  <ion-list inset style="border: 1px solid #d6d6d6;">
+
+    <button ion-item *ngIf="settings?.pages" (click)="about(settings.pages.about)">
+      About us
+    </button>
+    <button ion-item *ngIf="settings?.pages" (click)="terms(settings.pages.terms)">
+      Terms & Conditions
+    </button>
+    <button ion-item *ngIf="settings?.pages" (click)="privacy(settings.pages.privacy)">
+      Privacy Policy
+    </button>
+    <button ion-item  (click)="appRates()">
+      Rate This App
+    </button>
+      <button ion-item (click)="share()">
+      Share This App
+    </button> 
+    <button ion-item (click)="composer()">
+      Support
+    </button>
+    <button ion-item (click)="logout()" *ngIf="service.loggedInn">
+      Logout
+    </button>
+    <button ion-item (click)="loginPage()" *ngIf="!service.loggedInn">
+      Login
+    </button>
+
+  </ion-list>     
+
+
+</ion-content>

@@ -1,0 +1,141 @@
+<ion-header class="post-header" no-border>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="post">
+
+  <div>
+    <ion-spinner *ngIf="!post?.post" name="crescent"></ion-spinner>
+  </div>
+
+  <div class="loader">
+  </div>
+
+  <div *ngIf="post">
+    <div *ngIf="post.post">
+
+      <div class="post-image-display">
+        <div *ngIf="post.post.thumbnail_images" class="post-image">
+          <img src="{{post.post.thumbnail_images.medium_large?.url}}">  
+        </div>
+
+        <div *ngIf="post.post.attachments.length && !post.post.thumbnail_images && !post.post.thumbnail">
+          <img *ngIf="post.post.attachments[0].mime_type == 'image/jpeg' || post.post.attachments[0].mime_type == 'image/gif' || post.post.attachments[0].mime_type == 'image/png'" src="{{post.post.attachments[0].url}}">
+          <div *ngIf="post.post.attachments[0].mime_type != 'image/jpeg' && post.post.attachments[0].mime_type != 'image/gif' && post.post.attachments[0].mime_type != 'image/png'" class="videoContainer">
+            <video src="{{post.post.attachments[0].url}}" controls></video>
+          </div>
+        </div>
+      </div>  
+
+
+
+      <button ion-button clear item-left class="category" color="danger" *ngIf="relatedPosts?.category"> <h2 [innerHTML]="relatedPosts.category.title | sanitizeHtml"></h2>
+      </button>
+
+      <ion-item no-lines class="date">
+       <h6><ion-icon name="md-time" color="icon-color"></ion-icon>{{post.post.date | keys}}</h6>
+     </ion-item>
+
+     <ion-item no-lines class="heading">
+       <h2 [innerHTML]="post.post.title | sanitizeHtml"></h2>
+     </ion-item>
+
+   </div>
+
+   <div class="post-detail">
+    <div [innerHTML]="post?.post?.content | sanitizeHtml"></div>
+  </div>
+
+  <div *ngIf="post?.post?.comments.length"  class="reviews">
+    <ion-item no-border bold>
+      <ion-label class="comment-header">Comments</ion-label>
+    </ion-item>
+    <div  *ngFor="let item of post.post.comments" style="border-bottom: 1px solid #e8e8e8;">
+      <ion-item no-lines class="review-content">
+        <ion-avatar item-start style="margin:8px">
+          <div [innerHTML]="item.image"></div>
+        </ion-avatar>
+        <h3 style="margin-bottom:6px;font-size:15px">{{item.name}}</h3>        
+        <h3 style="color:#9e9898;margin-bottom:4px"><ion-icon name="md-time"></ion-icon>
+         {{item.date | keys}}
+       </h3>
+     </ion-item>
+     <div [innerHTML]="item.content | sanitizeHtml"></div>
+   </div>
+ </div>
+
+
+ <form #f="ngForm" class="comment-form" *ngIf="post?.post">
+
+  <ion-item style="padding-left: 0;font-size: 18px;">
+    <ion-label class="reply-header">Leave a Reply</ion-label>
+  </ion-item>
+
+  <div class="comment-form-content">
+    <ion-item>
+     <ion-input type="text" [(ngModel)]="form.nickname" name="nickname" placeholder="Name"></ion-input>
+   </ion-item>
+   <ion-item>
+     <ion-input type="email" [(ngModel)]="form.email" name="email" placeholder="Email"></ion-input>
+   </ion-item>
+   <ion-item>
+     <ion-textarea rows="3" required type="text" [(ngModel)]="form.content" name="content" placeholder="Comment"></ion-textarea>
+   </ion-item>
+ </div>
+ <div class="margin">
+  <button ion-button block color="button-color" type="submit" text-uppercase [disabled]="disableSubmit" (click)="submit(form)" >Submit</button><br>
+</div>
+</form>
+
+
+<div *ngIf="relatedPosts?.posts" class="show-recent">
+
+  <ion-item no-border>
+    <ion-label class="related-header">Related Stories</ion-label>
+  </ion-item>
+
+  <ion-row class="row unlimited-items">
+    <ion-col *ngFor="let item of relatedPosts.posts" class="col">
+
+      <ion-card tappable (click)="getPost(item.id, post.post.categories[0].title)">
+        <ion-card-content>
+         <ion-thumbnail item-left *ngIf="item.thumbnail">
+          <img src="{{item.thumbnail}}">
+        </ion-thumbnail>
+
+        <ion-thumbnail item-left *ngIf="!item.thumbnail && item.thumbnail_images?.medium_large">
+          <img src="{{item.thumbnail_images.medium_large.url}}">
+        </ion-thumbnail>
+
+        <ion-thumbnail item-left *ngIf="!item.thumbnail && !item.attachments.length">
+          <img src="assets/img/shop-icon.jpg">
+        </ion-thumbnail>
+      </ion-card-content>
+      <div class="details">
+        <h2 [innerHTML]="item.title | sanitizeHtml" style="margin: 5px 0;"></h2>
+        <h3  style="margin: 10px 0;"><ion-icon name="md-time"></ion-icon>{{item.date | keys}}</h3>
+        <div [innerHTML]="item.content | sanitizeHtml" class="info"></div>
+      </div>
+    </ion-card>
+  </ion-col>
+</ion-row>
+</div>
+
+</div>
+
+
+<ion-fab bottom right #fab>
+  <button ion-fab class="share"><ion-icon name="md-share"></ion-icon></button>
+  <ion-fab-list side="top">
+    <button ion-fab style="color: #FF5722" (click)="shareWithGmail(post.post, 'Instagram', fab)"><ion-icon name="ios-mail"></ion-icon></button>
+    <button ion-fab style="color: #34af23" name="logo-whatsapp" (click)="shareWithWhatsapp(post.post, 'Whatsapp', fab)"><ion-icon name="logo-whatsapp"></ion-icon></button>
+    <button ion-fab style="color: #00aced" (click)="shareWithTw(post.post, 'Twitter', fab)"><ion-icon name="logo-twitter"></ion-icon></button>
+    <button ion-fab style="color: #3b5998" (click)="shareWithFb(post.post, 'Facebook', fab)"><ion-icon name="logo-facebook"></ion-icon></button>
+  </ion-fab-list>
+</ion-fab>
+
+</ion-content>

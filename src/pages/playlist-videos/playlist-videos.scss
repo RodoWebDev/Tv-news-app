@@ -1,0 +1,30 @@
+.video-page {
+
+.card {
+  
+  box-shadow: none;
+}  
+
+ ion-card {
+    position: relative;
+    margin: 8px;
+    border-radius: 0;
+    width: calc(100% - 16px);
+
+    ion-card-content{
+      padding:0px;
+      overflow: hidden;
+    }
+
+    }
+
+}
+
+.video-header{
+   .toolbar-title-md{
+      text-align:left;
+      text-transform:uppercase;
+      font-weight:600;
+   }
+ }  
+

@@ -1,0 +1,113 @@
+<ion-split-pane>
+
+  <!-- logged out menu -->
+<!--   <ion-menu id="loggedOutMenu" [content]="content">
+
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="outer-content">
+
+      <ion-list style="margin-top: 10px;margin-bottom: 12px">
+        <ion-list-header tappable (click)="goHome()" menuClose>
+          Home
+          <ion-icon item-left name="md-home"></ion-icon>
+        </ion-list-header>
+      </ion-list>
+
+      <ion-list>
+        <ion-list-header>
+          Categories
+        </ion-list-header>
+        <button [color]="isActive(item)" ion-item menuClose *ngFor="let item of service.mainCategories" (click)="getCategory(item)">
+        <span [innerHtml]="item.title"></span>
+        </button>
+        <button ion-item menuClose (click)="youtube()">
+          <ion-icon item-start name="logo-youtube"></ion-icon>
+          YouTube
+        </button>
+      </ion-list>
+
+      <ion-list>
+        <ion-list-header>
+          Account
+        </ion-list-header>
+        
+        <button ion-item menuClose (click)="support()">
+          <ion-icon item-start name="md-help"></ion-icon>
+          Support
+        </button>
+      </ion-list>
+    </ion-content>
+
+  </ion-menu>
+ -->
+  <!-- logged in menu -->
+<!--   <ion-menu id="loggedInMenu" [content]="content">
+
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="outer-content">
+
+      <ion-list>
+        <ion-list-header (click)="goHome()" menuClose>
+          Home
+          <ion-icon item-left name="md-home"></ion-icon>
+        </ion-list-header>
+      </ion-list>
+
+      <ion-list>
+        <ion-list-header>
+          Categories
+        </ion-list-header>
+        <button ion-item *ngFor="let item of service.mainCategories" [color]="isActive(item)" menuClose (click)="getCategory(item)">
+        <span [innerHtml]="item.title"></span>
+        </button>
+
+        <button ion-item menuClose (click)="youtube()">
+          <ion-icon item-start name="logo-youtube"></ion-icon>
+          YouTube
+        </button>
+      </ion-list>
+
+      <ion-list>
+        <ion-list-header>
+          Account
+        </ion-list-header>
+        <button ion-item menuClose *ngFor="let p of loggedInPages" (click)="openPage(p)">
+          <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
+          {{p.title}}
+        </button>
+
+
+        <button ion-item menuClose (click)="support()">
+          <ion-icon item-start name="md-help"></ion-icon>
+          Support
+        </button>
+      </ion-list>
+
+      <ion-list>
+        <ion-list-header>
+          Tutorial
+        </ion-list-header>
+        <button ion-item menuClose (click)="openTutorial()">
+          <ion-icon item-start name="hammer"></ion-icon>
+          Show Tutorial
+        </button>
+      </ion-list>
+
+    </ion-content>
+
+  </ion-menu>
+ -->
+  <!-- main navigation -->
+  <ion-nav [root]="rootPage" #content swipeBackEnabled="false" main name="app"></ion-nav>
+
+</ion-split-pane>

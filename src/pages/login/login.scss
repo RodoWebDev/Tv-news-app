@@ -1,0 +1,155 @@
+
+.page-login {
+
+	background-image: url("../assets/img/cover.jpg");
+	background-repeat: no-repeat;
+	background-size:cover;	
+  
+	img {
+	max-width: 140px;
+	border-radius: 50%;
+	}
+
+
+	.name{
+		h2{
+		font-size: 25px;
+		text-align: center;
+		color: #ddd;
+		}
+	}
+
+	form{
+	margin: 30px 50px 0 50px;
+	margin-top: 80px;
+
+		.item{
+		background-color: transparent;
+		border-bottom: 1px solid #999;
+		padding: 0;
+		height: 65px;
+		}
+		
+		.item.item-block .item-inner {
+		padding-right: 8px;
+		border-bottom: 0;
+		}
+
+		.text-input{
+		color: #ddd;
+		}
+
+		input::-webkit-input-placeholder {
+		color: #ddd !important;
+		}
+
+		.button{
+		border-radius: 0;
+		margin-top: 20px;
+		}
+	}
+
+	hr {
+	height: 1px;
+	background-color: #999;
+	margin: 35px 50px;
+	}
+
+	.or-button{
+	border: 1px solid #999;
+    border-radius: 50%;
+    width: 35px;
+    background: #000;
+    position: absolute;
+    right: 45%;
+    color: #fff;
+    margin-top: -51px;
+    font-size: 12px;
+	}
+
+
+	.social-login{
+	margin: 20px 40px;
+
+		.button{
+		border-radius: 0;
+		height: 2.8em;
+		font-size: 13px;
+		}
+	}
+
+	.register{
+		h2{
+		font-size: 16px;
+		text-align: center;
+		color: #ddd;
+		margin: 30px 50px;
+		}
+	}
+
+
+    .item-md.item-input.ng-invalid.ng-touched:not(.input-has-focus) .item-inner {
+    border-bottom-color: #f2f2f2;
+    box-shadow: none;
+    }
+
+    .item-md.item-input.input-has-focus .item-inner{
+    box-shadow: none;
+    }
+
+    .item-md.item-input.ng-valid.input-has-value:not(.input-has-focus) .item-inner {
+    border-bottom-color: #f2f2f2;
+    box-shadow: none;
+    }
+    .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):last-child {
+    border-bottom-color: #f2f2f2;
+    box-shadow: none;
+    }
+    .list-md .item-input.input-has-focus:last-child{
+    box-shadow: none;
+    }
+    .list-md .item-input.ng-invalid.ng-touched:not(.input-has-focus):last-child {
+    border-bottom-color: #f2f2f2;
+    box-shadow: none;
+    }
+
+}
+
+.page-login:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+}
+
+.login-header{
+	.toolbar-background {
+    border-color: transparent;
+    background: transparent;
+    }
+
+    .bar-button-default {
+    color: #ddd;
+    }
+}
+
+.page-login {
+
+	svg{
+	animation-duration: 3000ms;
+	}
+
+	.spinner-crescent circle {
+	fill: transparent;
+	stroke-width: 2px;
+	stroke-dasharray: 10px;
+	stroke-dashoffset: 12px;
+	stroke: #fff;
+	}
+
+}
+
+

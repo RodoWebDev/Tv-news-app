@@ -1,0 +1,42 @@
+<ion-header>
+   <ion-navbar color="header">
+      <ion-searchbar
+     [(ngModel)]="myInput"
+     [showCancelButton]="shouldShowCancel"
+     (ionInput)="onInput($event)"
+     (ionCancel)="onCancel($event)">
+    </ion-searchbar>
+   </ion-navbar>
+</ion-header>
+<ion-content class="search-page">
+<div class="loader">
+<ion-spinner *ngIf="searchLoading" name="crescent" style="margin-top: 12px; margin-bottom:5px" ></ion-spinner>
+</div>
+
+
+  <div *ngIf="search" class="search">
+    <div *ngIf="!search.posts.length && !searchLoading">
+       <h3 text-center> No Stories found! </h3>
+    </div>
+    <ion-item *ngIf="search.posts.length">
+       <ion-label color="button-color">Search Results</ion-label>
+    </ion-item>
+      <div *ngFor="let item of search.posts">
+         <ion-item text-wrap (click)="getPost(item.id, item.categories[0].title)" tappable>
+            <ion-thumbnail item-left>
+               <img src="{{item.thumbnail}}" style="border-radius:5%">
+            </ion-thumbnail>
+            <h4 [innerHTML]="item.title"></h4>
+            <h5>Source - {{item.author.name}}</h5>
+            <h5>{{item.modified | date}}</h5>
+         </ion-item>
+      </div>
+
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="has_more_items">
+     <ion-infinite-scroll-content
+      loadingSpinner="crescent"
+      loadingText="Loading more data...">
+     </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+</ion-content>

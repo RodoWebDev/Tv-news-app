@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "679136735764",
+    "firebase_url": "https://ionic-news-7e6be.firebaseio.com",
+    "project_id": "ionic-news-7e6be",
+    "storage_bucket": "ionic-news-7e6be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679136735764:android:e24d94b564e61105",
+        "android_client_info": {
+          "package_name": "com.app.thrilliantnigeriatvc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679136735764-buhkrsue0m800puahoio9ek8mbk7mur9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5pybSFaELIQDRp9ELJ2m06J6QGAwKkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679136735764:android:26cdefa22fa6c299",
+        "android_client_info": {
+          "package_name": "com.app.thrilliantnigeriatvc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679136735764-buhkrsue0m800puahoio9ek8mbk7mur9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5pybSFaELIQDRp9ELJ2m06J6QGAwKkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

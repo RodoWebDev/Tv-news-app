@@ -1,0 +1,549 @@
+<ion-header
+  no-border
+  [scrollHide]="headerScrollConfig"
+  [scrollContent]="pageContent"
+>
+  <ion-navbar no-border-bottom>
+    <ion-title>
+      <img src="assets/img/logo-toolber.png" />
+    </ion-title>
+
+    <ion-buttons end>
+      <button
+        ion-button
+        icon-only
+        (click)="searchPage()"
+        style="margin-right: 10px;"
+        color="light"
+      >
+        <ion-icon name="ios-search"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="presentFilter()" color="light">
+        <ion-icon ios="ios-options" md="md-options"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-row class="filters">
+      <ion-col class="center" no-padding col-12>
+        <ion-slides #tabs (ionSlideDidChange)="tabChanged()" slidesPerView="1">
+          <ion-slide
+            (click)="tabChanged(pos)"
+            *ngFor="let category of categories; let pos = index"
+          >
+            <p
+              style="font-family: 'Montserrat', sans-serif;"
+              [class.selected]="selectedCategory?.id === category.id"
+            >
+              {{ category.desc }}
+            </p>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+<div class="posts-content" fullscreen #parentContent>
+  <ion-slides #slider (ionSlideDidChange)="slideChanged()" zoom="false">
+    <ion-slide zoom="false">
+      <ion-content class="posts" #posts>
+        <ion-spinner
+          class="inner-spinner"
+          *ngIf="!topStories?.posts"
+          name="crescent"
+        ></ion-spinner>
+        <div *ngIf="topStories?.posts" class="no-post">
+          <div *ngIf="!topStories?.posts.length">
+            <h3>No posts found!</h3>
+          </div>
+        </div>
+
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <div class="show-recent" *ngIf="topStories?.posts.length">
+          <ion-row style="margin-top: 12%" class="row unlimited-items">
+            <ion-col
+              style=" height:10%;"
+              *ngFor="let post of topStories?.posts"
+            >
+              <ion-card
+                tappable
+                style="background-color: #FFF"
+                (click)="goToPostDetail(post)"
+              >
+                <ion-card-content>
+                  <div *ngIf="post.thumbnail_images" class="post-image">
+                    <img
+                      *ngIf="post.thumbnail_images.medium_large"
+                      src="{{ post.thumbnail_images.medium_large.url }}"
+                    />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.better_featured_image &&
+                      post.better_featured_image.source_url
+                    "
+                    class="post-image"
+                  >
+                    <img src="{{ post.better_featured_image.source_url }}" />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.attachments?.length &&
+                      !post.thumbnail_images &&
+                      !post.thumbnail
+                    "
+                  >
+                    <img
+                      *ngIf="
+                        post.attachments[0].mime_type == 'image/jpeg' ||
+                        post.attachments[0].mime_type == 'image/gif' ||
+                        post.attachments[0].mime_type == 'image/png'
+                      "
+                      src="{{ post.attachments[0].url }}"
+                    />
+                    <div
+                      *ngIf="
+                        post.attachments[0].mime_type != 'image/jpeg' &&
+                        post.attachments[0].mime_type != 'image/gif' &&
+                        post.attachments[0].mime_type != 'image/png'
+                      "
+                      class="videoContainer"
+                    >
+                      <video
+                        src="{{ post.attachments[0].url }}"
+                        controls
+                      ></video>
+                    </div>
+                  </div>
+
+                  <!-- <button
+                    ion-button
+                    clear
+                    item-left
+                    class="category"
+                    color="danger"
+                    *ngIf="post.categories"
+                  >
+                    <h4
+                      [innerHTML]="post.categories[0]?.title | sanitizeHtml"
+                    ></h4>
+                  </button> -->
+                </ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col col-12 class="details">
+                      <h2
+                        style="margin-left: 3%;font-family: 'Source Sans Pro', sans-serif"
+                        [innerHTML]="post.title"
+                      ></h2>
+                    </ion-col>
+                    <br />
+                    <ion-col no-padding col-12 class="share">
+                      <ion-row justify-content-center align-items-center>
+                        <ion-col col-6 text-left>
+                          <p class="post-date">{{ post?.date | dateAgo }}</p>
+                        </ion-col>
+                        <ion-col col-6 text-right>
+                          <button ion-button icon-start clear small>
+                            <ion-icon class="fa-share-alt"></ion-icon>
+                          </button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <div>
+                  <!-- <p color="light"><small><ion-icon name="md-time"></ion-icon> {{post.date | keys}}</small></p> -->
+                </div>
+                <!-- <div class="sharing">
+                  <ion-grid>
+                    <ion-row no-padding>
+                      <ion-col col-12>
+                        <div class="sharing">
+                          <h1>Ola</h1>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div> -->
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-item style="text-align: center;" [hidden]="hasMoreStories"
+            >No More Stories</ion-item
+          >
+        </div>
+
+        <ion-infinite-scroll
+          (ionInfinite)="doInfinite($event)"
+          [enabled]="hasMoreTopStories"
+        >
+          <ion-infinite-scroll-content
+            loadingSpinner="crescent"
+            loadingText="Loading more stories.."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-content class="posts" #posts fullscreen>
+        <ion-spinner
+          class="inner-spinner"
+          *ngIf="!politics?.posts"
+          name="crescent"
+        ></ion-spinner>
+        <div class="show-recent">
+          <ion-row style="margin-top: 12%" class="row unlimited-items">
+            <ion-col *ngFor="let post of politics?.posts">
+              <ion-card
+                tappable
+                (click)="goToPostDetail(post)"
+                style="background-color: #FFF"
+              >
+                <ion-card-content>
+                  <div *ngIf="post.thumbnail_images" class="post-image">
+                    <img
+                      *ngIf="post.thumbnail_images.medium_large"
+                      src="{{ post.thumbnail_images.medium_large.url }}"
+                    />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.better_featured_image &&
+                      post.better_featured_image.source_url
+                    "
+                    class="post-image"
+                  >
+                    <img src="{{ post.better_featured_image.source_url }}" />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.attachments?.length &&
+                      !post.thumbnail_images &&
+                      !post.thumbnail
+                    "
+                  >
+                    <img
+                      *ngIf="
+                        post.attachments[0].mime_type == 'image/jpeg' ||
+                        post.attachments[0].mime_type == 'image/gif' ||
+                        post.attachments[0].mime_type == 'image/png'
+                      "
+                      src="{{ post.attachments[0].url }}"
+                    />
+                    <div
+                      *ngIf="
+                        post.attachments[0].mime_type != 'image/jpeg' &&
+                        post.attachments[0].mime_type != 'image/gif' &&
+                        post.attachments[0].mime_type != 'image/png'
+                      "
+                      class="videoContainer"
+                    >
+                      <video
+                        src="{{ post.attachments[0].url }}"
+                        controls
+                      ></video>
+                    </div>
+                  </div>
+                </ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col col-12 class="details">
+                      <h2
+                        style="margin-left: 3%;font-family: 'Source Sans Pro', sans-serif"
+                        [innerHTML]="post.title"
+                      ></h2>
+                    </ion-col>
+                    <br />
+                    <ion-col no-padding col-12 class="share">
+                      <ion-row justify-content-center align-items-center>
+                        <ion-col col-6 text-left>
+                          <p class="post-date">{{ post?.date | dateAgo }}</p>
+                        </ion-col>
+                        <ion-col col-6 text-right>
+                          <button ion-button icon-start clear small>
+                            <ion-icon class="fa-share-alt"></ion-icon>
+                          </button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <!-- <div class="details">
+                  <h2 [innerHTML]="post.title"></h2>
+                </div> -->
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-item style="text-align: center;" [hidden]="hasMoreStories">
+            No More Stories
+          </ion-item>
+        </div>
+        <ion-infinite-scroll
+          (ionInfinite)="doInfinite($event)"
+          *ngIf="hasMoreTopStories"
+        >
+          <ion-infinite-scroll-content
+            loadingSpinner="crescent"
+            loadingText="Loading more stories.."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-content class="posts" #posts fullscreen>
+        <ion-spinner
+          class="inner-spinner"
+          *ngIf="!business?.posts"
+          name="crescent"
+        ></ion-spinner>
+        <div class="show-recent">
+          <ion-row style="margin-top: 12%" class="row unlimited-items">
+            <ion-col *ngFor="let post of business?.posts">
+              <ion-card
+                tappable
+                (click)="goToPostDetail(post)"
+                style="background-color: #FFF"
+              >
+                <ion-card-content>
+                  <div *ngIf="post.thumbnail_images" class="post-image">
+                    <img
+                      *ngIf="post.thumbnail_images.medium_large"
+                      src="{{ post.thumbnail_images.medium_large.url }}"
+                    />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.better_featured_image &&
+                      post.better_featured_image.source_url
+                    "
+                    class="post-image"
+                  >
+                    <img src="{{ post.better_featured_image.source_url }}" />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.attachments?.length &&
+                      !post.thumbnail_images &&
+                      !post.thumbnail
+                    "
+                  >
+                    <img
+                      *ngIf="
+                        post.attachments[0].mime_type == 'image/jpeg' ||
+                        post.attachments[0].mime_type == 'image/gif' ||
+                        post.attachments[0].mime_type == 'image/png'
+                      "
+                      src="{{ post.attachments[0].url }}"
+                    />
+                    <div
+                      *ngIf="
+                        post.attachments[0].mime_type != 'image/jpeg' &&
+                        post.attachments[0].mime_type != 'image/gif' &&
+                        post.attachments[0].mime_type != 'image/png'
+                      "
+                      class="videoContainer"
+                    >
+                      <video
+                        src="{{ post.attachments[0].url }}"
+                        controls
+                      ></video>
+                    </div>
+                  </div>
+                </ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col col-12 class="details">
+                      <h2
+                        style="margin-left: 3%; font-family: 'Source Sans Pro', sans-serif"
+                        [innerHTML]="post.title"
+                      ></h2>
+                    </ion-col>
+                    <br />
+                    <ion-col no-padding col-12 class="share">
+                      <ion-row justify-content-center align-items-center>
+                        <ion-col col-6 text-left>
+                          <p class="post-date">{{ post?.date | dateAgo }}</p>
+                        </ion-col>
+                        <ion-col col-6 text-right>
+                          <button ion-button icon-start clear small>
+                            <ion-icon class="fa-share-alt"></ion-icon>
+                          </button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <!-- <div class="details">
+                  <h2 [innerHTML]="post.title"></h2>
+                </div> -->
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-item style="text-align: center;" [hidden]="hasMoreStories">
+            No More Stories
+          </ion-item>
+        </div>
+        <ion-infinite-scroll
+          (ionInfinite)="doInfinite($event)"
+          *ngIf="hasMoreTopStories"
+        >
+          <ion-infinite-scroll-content
+            loadingSpinner="crescent"
+            loadingText="Loading more stories.."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-content class="posts" #posts fullscreen>
+        <ion-spinner
+          class="inner-spinner"
+          *ngIf="!sports?.posts"
+          name="crescent"
+        ></ion-spinner>
+        <div class="show-recent">
+          <ion-row style="margin-top: 12%" class="row unlimited-items">
+            <ion-col *ngFor="let post of sports?.posts">
+              <ion-card
+                tappable
+                (click)="goToPostDetail(post)"
+                style="background-color: #FFF"
+              >
+                <ion-card-content>
+                  <div *ngIf="post.thumbnail_images" class="post-image">
+                    <img
+                      *ngIf="post.thumbnail_images.medium_large"
+                      src="{{ post.thumbnail_images.medium_large.url }}"
+                    />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.better_featured_image &&
+                      post.better_featured_image.source_url
+                    "
+                    class="post-image"
+                  >
+                    <img src="{{ post.better_featured_image.source_url }}" />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      post.attachments?.length &&
+                      !post.thumbnail_images &&
+                      !post.thumbnail
+                    "
+                  >
+                    <img
+                      *ngIf="
+                        post.attachments[0].mime_type == 'image/jpeg' ||
+                        post.attachments[0].mime_type == 'image/gif' ||
+                        post.attachments[0].mime_type == 'image/png'
+                      "
+                      src="{{ post.attachments[0].url }}"
+                    />
+                    <div
+                      *ngIf="
+                        post.attachments[0].mime_type != 'image/jpeg' &&
+                        post.attachments[0].mime_type != 'image/gif' &&
+                        post.attachments[0].mime_type != 'image/png'
+                      "
+                      class="videoContainer"
+                    >
+                      <video
+                        src="{{ post.attachments[0].url }}"
+                        controls
+                      ></video>
+                    </div>
+                  </div>
+                </ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col col-12 class="details">
+                      <h2
+                        style="margin-left: 3%;font-family: 'Source Sans Pro', sans-serif"
+                        [innerHTML]="post.title"
+                      ></h2>
+                    </ion-col>
+                    <br />
+                    <ion-col no-padding col-12 class="share">
+                      <ion-row justify-content-center align-items-center>
+                        <ion-col col-6 text-left>
+                          <p class="post-date">{{ post?.date | dateAgo }}</p>
+                        </ion-col>
+                        <ion-col col-6 text-right>
+                          <button ion-button icon-start clear small>
+                            <ion-icon class="fa-share-alt"></ion-icon>
+                          </button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <!-- <div class="details">
+                  <h2 [innerHTML]="post.title"></h2>
+                </div> -->
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-item style="text-align: center;" [hidden]="hasMoreStories">
+            No More Stories
+          </ion-item>
+        </div>
+        <ion-infinite-scroll
+          (ionInfinite)="doInfinite($event)"
+          *ngIf="hasMoreTopStories"
+        >
+          <ion-infinite-scroll-content
+            loadingSpinner="crescent"
+            loadingText="Loading more stories.."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+    </ion-slide>
+  </ion-slides>
+  <!--
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="hasMoreTopStories">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText='Loading more stories..'></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+ -->
+</div>
+
+<ion-footer [scrollHide]="footerScrollConfig" [scrollContent]="pageContent">
+  <ion-segment
+    class="bottom-segment"
+    [(ngModel)]="segment"
+    (ionChange)="updateSchedule()"
+  >
+    <ion-segment-button value="latest">
+      <ion-label>Newsfeed</ion-label>
+    </ion-segment-button>
+    <ion-segment-button
+      class="watch-live"
+      icon-only
+      value="business"
+      (click)="showLive()"
+    >
+      <!-- <ion-label>Livestream</ion-label> -->
+      <!-- <ion-icon name="logo-youtube" color="danger"></ion-icon> -->
+      <img src="assets/img/youtube.png" />
+      <!-- <p>Watch Live</p> -->
+    </ion-segment-button>
+    <ion-segment-button value="sports" (click)="showReport()">
+      <ion-label>U-REPORT</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-footer>

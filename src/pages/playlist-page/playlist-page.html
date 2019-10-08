@@ -1,0 +1,39 @@
+<ion-header class="playlist-header">
+  <ion-navbar color="header">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>    
+    <ion-title>Playlist</ion-title>    
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="playlist-page">
+
+  <ion-spinner *ngIf="loader" name="crescent"></ion-spinner>
+
+  <div *ngIf="playlist">
+    <div class="card-background-page">
+    <ion-row class="row unlimited-items">
+     <ion-col *ngFor="let post of playlist.items" class="col">
+        <ion-card tappable (click)="getPlaylistVideos(post.id, post.snippet.title)">
+          <ion-card-content class="post-image">
+            <img *ngIf="post.snippet.thumbnails.high.url" src="{{post.snippet.thumbnails.high.url}}">
+            <img *ngIf="!post.snippet.thumbnails.high.url" src="{{post.snippet.thumbnails.default.url}}">
+          </ion-card-content>
+          <div>
+          <ion-label>{{post.snippet.title}}</ion-label>
+          </div>
+        </ion-card>
+     </ion-col>
+     </ion-row>
+
+    </div>
+  </div>
+
+   <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="has_more_items">
+   <ion-infinite-scroll-content
+      loadingSpinner="crescent"
+      loadingText="Loading more stories...">
+   </ion-infinite-scroll-content>
+   </ion-infinite-scroll>
+</ion-content>

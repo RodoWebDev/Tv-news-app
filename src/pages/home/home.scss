@@ -1,0 +1,142 @@
+page-home {
+  ion-slides .slide-zoom {
+    height: 100%;
+  }
+
+  .toolbar ion-slides {
+    width: 50%;
+    margin: 0 auto;
+
+    .swiper-container {
+      overflow: visible;
+    }
+  }
+
+  .show-recent {
+    background-color: #ededed;
+  }
+
+  .card {
+    background-color: #FFF;
+  }
+
+  .col {
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+  }
+
+  .details {
+    margin-bottom: 18%;
+  }
+
+  .share {
+    background: #FFF;
+    width: 100%;
+  }
+
+  .filters {
+    ion-col {
+      text-align: center;
+      font-size: 2.6rem;
+      line-height: 2.6rem;
+
+      ion-icon {
+        color: #ccc;
+      }
+
+      &.col-with-arrow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    p {
+      color: #fff;
+      margin: 0;
+      font-size: 2.6rem;
+      line-height: 4rem;
+    }
+
+    .selected {
+      font-weight: 700;
+      border-bottom: 4px solid #c51340;
+    }
+  }
+
+  .category {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    margin: 0;
+    z-index: 1;
+    height: 20px;
+    background: #c51340;
+    border-radius: 0;
+
+    h4 {
+      color: #fff;
+      margin: 0;
+    }
+  }
+
+  .sharing {
+    background: #fff;
+  }
+
+  .posts-content {
+    margin-top: 60px;
+    height: 100%;
+  }
+
+  .post-date {
+    color: red;
+    margin-left: 3%;
+  }
+
+  .inner-spinner {
+    margin-top: 60px;
+  }
+
+  // footer
+  .bottom-segment {
+    background-color: color($colors, primary);
+    padding: 2rem 20px 0;
+    border-top: 3px solid #c51340;
+
+    ion-label {
+      margin: 0;
+      font-weight: bold;
+      font-size: 1.2rem;
+      line-height: 1.8rem;
+    }
+
+    ion-icon {
+      margin: 0;
+      font-weight: bold;
+      font-size: 1.2rem;
+      line-height: 1.8rem;
+    }
+
+    .segment-button.segment-activated {
+      border-color: #c51340;
+      border-width: 4px;
+    }
+
+    .watch-live {
+      overflow: visible;
+      opacity: 1;
+
+      img {
+        position: absolute;
+        left: 50%;
+        top: -34px;
+        width: 70%;
+        z-index: 59;
+        transform: translateX(-50%);
+      }
+    }
+
+  }
+}

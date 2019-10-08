@@ -1,0 +1,39 @@
+.tabbar {
+  justify-content: center;
+  border-top: 4px solid #b20015;
+}
+
+.tab-button {
+  
+}
+.tabs-ios .tabbar {
+    border-top: 4px solid #b20015;
+}
+.tabs .tab-button[aria-selected=true] .tab-button-icon {
+    // color: $button-color;
+}
+.tabs .tab-button{
+    font-weight: bolder;
+    color: #FFF;
+    overflow: visible;
+    padding: 8px 0;
+}
+.tabs .tab-button[aria-selected=true] {
+    font-weight: bolder;
+    color: #FFF
+}
+.tabs .tab-button.has-icon{
+    display: table;
+}
+.tabs .tab-button.has-icon .tab-button-text{
+    display: table-cell;
+    vertical-align: bottom;
+    font-size: 12px;
+}
+.tabs-ios .tab-button-icon {
+    width: 66px;
+    height: 60px;
+    position: absolute;
+    top: -75%;
+    left: calc(50% - 33px);
+}

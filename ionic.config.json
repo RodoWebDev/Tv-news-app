@@ -1,0 +1,19 @@
+{
+  "name": "myApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "https://tvcnews.tv/api"
+    },{
+      "path": "/wp-admin",
+      "proxyUrl": "https://tvcnews.tv/wp-admin"
+    },{
+      "path": "/wp-json",
+      "proxyUrl": "https://tvcnews.tv/wp-json"
+    }
+  ]
+}

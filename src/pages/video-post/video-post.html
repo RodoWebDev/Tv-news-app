@@ -1,0 +1,56 @@
+<ion-header class="post-header" no-border>
+  <ion-navbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="post">
+
+  <div>
+    <ion-spinner *ngIf="!post" name="crescent"></ion-spinner>
+  </div>
+
+  <div *ngIf="post">
+    <div class="post-image-display">
+      <div *ngIf="post.better_featured_image && post.better_featured_image.media_details?.sizes?.thumb_800x360" class="post-image">
+        <img src="{{post.better_featured_image.media_details.sizes.thumb_800x360.source_url}}">  
+      </div>
+    </div>  
+
+   <ion-item no-lines class="heading">
+     <h2 [innerHTML]="post.title?.rendered | sanitizeHtml"></h2>
+   </ion-item>
+
+   <div class="post-content" [innerHTML]="post.content?.rendered | sanitizeHtml"></div>
+
+   <!--    
+  <div *ngIf="post?.post?.comments.length"  class="reviews">
+    <ion-item no-border bold>
+      <ion-label class="comment-header">Comments</ion-label>
+    </ion-item>
+    <div  *ngFor="let item of post.post.comments" style="border-bottom: 1px solid #e8e8e8;">
+      <ion-item no-lines class="review-content">
+        <ion-avatar item-start style="margin:8px">
+          <div [innerHTML]="post.image"></div>
+        </ion-avatar>
+        <h3 style="margin-bottom:6px;font-size:15px">{{post.name}}</h3>        
+        <h3 style="color:#9e9898;margin-bottom:4px"><ion-icon name="md-time"></ion-icon>
+         {{post.date | keys}}
+       </h3>
+     </ion-item>
+     <div [innerHTML]="post.content | sanitizeHtml"></div>
+   </div>
+    -->
+</div>
+
+
+<ion-fab bottom right #fab>
+  <button ion-fab class="share"><ion-icon name="md-share"></ion-icon></button>
+  <ion-fab-list side="top">
+    <button ion-fab style="color: #FF5722" (click)="shareWithGmail(post.post, 'Instagram', fab)"><ion-icon name="ios-mail"></ion-icon></button>
+    <button ion-fab style="color: #34af23" name="logo-whatsapp" (click)="shareWithWhatsapp(post.post, 'Whatsapp', fab)"><ion-icon name="logo-whatsapp"></ion-icon></button>
+    <button ion-fab style="color: #00aced" (click)="shareWithTw(post.post, 'Twitter', fab)"><ion-icon name="logo-twitter"></ion-icon></button>
+    <button ion-fab style="color: #3b5998" (click)="shareWithFb(post.post, 'Facebook', fab)"><ion-icon name="logo-facebook"></ion-icon></button>
+  </ion-fab-list>
+</ion-fab>
+
+</ion-content>

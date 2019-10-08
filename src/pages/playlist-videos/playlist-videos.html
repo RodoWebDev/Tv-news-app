@@ -1,0 +1,28 @@
+<ion-header class="video-header">
+  <ion-navbar color="header">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="name">{{name}}</ion-title> 
+    <ion-title *ngIf="!name">Videos</ion-title>          
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="video-page">
+  <ion-spinner *ngIf="loader" name="crescent" style="margin-top:50px;margin-bottom:4px"></ion-spinner>
+
+  <ion-list *ngIf="videosList">
+      <ion-card *ngFor="let post of videosList.items">
+        <ion-card-content class="post-image" style="margin-bottom: -5px;">
+          <iframe width="100%" height="280" [src]="post.snippet.resourceId.videoId | youtube" frameborder="0" allowfullscreen></iframe>
+        </ion-card-content>
+      </ion-card>
+  </ion-list>
+
+   <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="has_more_items">
+   <ion-infinite-scroll-content
+      loadingSpinner="crescent"
+      loadingText="Loading more stories...">
+   </ion-infinite-scroll-content>
+   </ion-infinite-scroll>
+</ion-content>
